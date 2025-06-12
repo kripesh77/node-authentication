@@ -1,83 +1,20 @@
+//JWT(JSON Web Token) is a stateless tokenization system
+//i.e., we do not need to store the token of the user anywhere
+//when server receives JWT token, server itself can decode the credentials used for encoding.
+//If server can decode the valid credential (initially used to encode), then server can ensure that the request is from valid user.
+
 const express = require("express");
+const jwt = require("jsonwebtoken");
+
+//We need this secret to encode and obtain our JWT token
+const JWT_SECRET = "blablabla";
+
 const app = express();
 
 const users = [];
 
+//to parse request body into json
 app.use(express.json());
-
-//returns a random string
-function generateToken() {
-  let options = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ];
-
-  let token = "";
-  for (let i = 0; i < 32; i++) {
-    token += options[Math.floor(Math.random() * options.length)];
-  }
-  return token;
-}
 
 app.post("/signup", (req, res) => {
   const username = req.body.username;
@@ -120,16 +57,25 @@ app.post("/signin", (req, res) => {
 
   //Now, if username is registered and password is also correct for that username
   //then we assign a token to that user
-  const token = generateToken();
-  user.token = token;
+  const token = jwt.sign({ username }, JWT_SECRET); //converting username into a JWT using JWT_SECRET
+
+  //Now we don't need this line of code to store the token as we don't need to store it
+  //user.token = token;
+
   res.json({ message: token });
   console.log(users);
 });
 
 app.get("/me", (req, res) => {
-  const token = req.headers.token;
+  //user still sends token, but this time it's JWT
+  const token = req.headers.token; //JWT
 
-  const user = users.find((u) => u.token === token);
+  //in "/signin", just how we converted "username" object to JWT
+  //this line of code converts back the "username" object using JWT and JWT_SECRET
+  const decodedInformation = jwt.verify(token, JWT_SECRET); //gives: {username: "user's-name"}
+  const username = decodedInformation.username;
+
+  const user = users.find((u) => u.username === username);
 
   if (user) {
     res.json({
