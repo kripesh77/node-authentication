@@ -85,12 +85,15 @@
           statusInfo.classList.remove("hidden");
           //doing the following just to check if token is valid or not
           try {
-            const res = await fetch("http://localhost:2000/me", {
-              headers: {
-                "Content-Type": "application/json",
-                token,
-              },
-            });
+            const res = await fetch(
+              "https://node-authentication-dhzx.onrender.com/me",
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  token,
+                },
+              }
+            );
             const data = await res.json();
             if (data.message) {
               statusInfo.innerHTML = data.message;
@@ -134,16 +137,19 @@
           const password = document
             .getElementById("signup-password-field")
             .value.trim();
-          const res = await fetch("http://localhost:2000/signup", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              password,
-            }),
-          });
+          const res = await fetch(
+            "https://node-authentication-dhzx.onrender.com/signup",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                username,
+                password,
+              }),
+            }
+          );
           const data = await res.json();
           console.log(data);
           setTimeout(() => {
@@ -164,16 +170,19 @@
         const password = document
           .querySelector("#login-password-field")
           .value.trim();
-        const res = await fetch("http://localhost:2000/signin", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        });
+        const res = await fetch(
+          "https://node-authentication-dhzx.onrender.com/signin",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              password,
+            }),
+          }
+        );
         const data = await res.json();
         if (data.message) {
           setTimeout(() => {
@@ -216,12 +225,15 @@
         .getElementById("user-information-loader")
         .addEventListener("click", async () => {
           const token = JSON.parse(localStorage.getItem("token"));
-          const res = await fetch("http://localhost:2000/me", {
-            headers: {
-              "Content-Type": "application/json",
-              token,
-            },
-          });
+          const res = await fetch(
+            "https://node-authentication-dhzx.onrender.com/me",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                token,
+              },
+            }
+          );
           const data = await res.json();
           statusInfo.innerHTML = "";
           const div1 = document.createElement("div");
