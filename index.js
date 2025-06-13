@@ -1,3 +1,4 @@
+require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const express = require("express");
@@ -92,6 +93,4 @@ app.get("/me", auth, (req, res) => {
   }
 });
 
-app.listen(2000, () => {
-  console.log("Server is listening at port 2000");
-});
+app.listen(2000);
