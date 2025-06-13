@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 
 const JWT_SECRET = "blabla";
 
@@ -33,6 +34,12 @@ function auth(req, res, next) {
   }
 }
 
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
 app.post("/signup", (req, res) => {
   const { username, password } = req.body;
 
@@ -60,6 +67,7 @@ app.post("/signin", (req, res) => {
 
   if (user.password !== password) {
     res.json({ message: "Password is incorrect" });
+    return;
   } else {
     const token = jwt.sign({ username }, JWT_SECRET);
     res.json({ token });
@@ -79,7 +87,7 @@ app.get("/me", auth, (req, res) => {
     });
   } else {
     res.status(401).json({
-      message: "Not Authorized, Token invalid",
+      message: "Not Authorized, Please login first",
     });
   }
 });

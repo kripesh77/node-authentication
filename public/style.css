@@ -1,0 +1,173 @@
+* {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+.hidden {
+  display: none;
+}
+.block {
+  display: block;
+}
+body {
+  background-color: #f7f9fc;
+  color: #333333;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form {
+  font-size: 1.2rem;
+  padding: 30px;
+  background-color: white;
+  color: #333333;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px black;
+
+  & > button {
+    align-self: center;
+    font-size: 1.1rem;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    background-color: black;
+    transition: all 0.2s linear;
+
+    &:hover {
+      cursor: pointer;
+      background-color: #b7b8bb;
+      color: black;
+    }
+  }
+
+  @media (width < 480px) {
+    padding: 15px;
+  }
+}
+
+p {
+  text-align: center;
+  margin-block: 8px 0px;
+  &:nth-child(odd) {
+    margin-block: 2px 0px;
+  }
+}
+
+#status-info {
+  max-width: 90vw;
+  width: 450px;
+  max-height: 100vh;
+  word-wrap: break-word;
+  background-color: #e1e1e1;
+  padding: 30px;
+  font-size: min(1.1rem, 10vw);
+
+  border-radius: 6px;
+  box-shadow: 0px 0px 10px black;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  background-color: #d1d5db;
+  font-size: large;
+  border-radius: 6px;
+  outline: none;
+
+  &:focus {
+    border-color: #4f8ef7;
+  }
+}
+
+.span {
+  text-decoration: underline;
+  color: #007bff;
+  &:hover {
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+#hero4 {
+  background-color: rgb(169, 169, 169);
+  width: 0vw;
+  padding: 15px;
+  position: fixed;
+  top: 5vh;
+  right: 0px;
+  font-size: 1.2rem;
+  border-left: 6px solid red;
+  border-radius: 6px 0px 0px 6px;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  animation: hello 0.2s ease forwards;
+
+  --hero-width: 30vw;
+  @media (width < 720px) {
+    --hero-width: 50vw;
+  }
+}
+@keyframes hello {
+  from {
+    width: 0vw;
+  }
+  to {
+    width: var(--hero-width);
+  }
+}
+
+#logout {
+  position: absolute;
+  font-size: min(1.1rem, 3vw);
+  top: 20px;
+  right: 30px;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: black;
+  color: white;
+}
+
+#hero3 {
+  max-width: 90vw;
+  gap: 20px;
+  box-sizing: border-box;
+  @media (width < 250px) {
+    margin-top: max(50px, 40vw);
+  }
+
+  @media (width < 200px) {
+    margin-top: max(50px, 70vw);
+  }
+
+  button {
+    background-color: black;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+
+    &:hover {
+      background-color: gray;
+      color: black;
+    }
+  }
+
+  div {
+    margin-top: 10px;
+    text-align: center;
+  }
+}

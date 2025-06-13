@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connecting FE with BE</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="hero1">
+      <form id="signup">
+        <label for="signup-username-field"
+          >Email:<br />
+
+          <input
+            type="text"
+            id="signup-username-field"
+            placeholder="Enter username..."
+            value="kripesh"
+          />
+        </label>
+        <label for="signup-password-field"
+          >Password:<br />
+
+          <input
+            type="password"
+            id="signup-password-field"
+            placeholder="Enter password..."
+            value="123123"
+          />
+        </label>
+        <button id="signup-btn">Signup</button>
+        <p>Already have an account ?</p>
+        <p><span class="span" id="span1">Signin</span></p>
+      </form>
+    </div>
+    <div id="hero2">
+      <form id="login">
+        <label for="login-username-field"
+          >Email:<br />
+          <input
+            type="text"
+            id="login-username-field"
+            placeholder="Enter username..."
+            value="kripesh"
+          />
+        </label>
+        <label for="login-password-field"
+          >Password:<br />
+          <input
+            type="password"
+            id="login-password-field"
+            placeholder="Enter password..."
+            value="123123"
+          />
+        </label>
+        <button id="login-btn">Login</button>
+        <p>Don't have an account ?</p>
+        <p><span class="span" id="span2">Signup</span></p>
+      </form>
+    </div>
+    <div id="hero3">
+      <button id="logout">Logout</button>
+      <p>Load your information through Authenticated End Point</p>
+      <div>
+        <button id="user-information-loader">Load</button>
+      </div>
+    </div>
+    <div id="status-info"></div>
+    <div id="hero4"></div>
+
+    <script>
+      let hero1 = document.getElementById("hero1");
+      let hero2 = document.getElementById("hero2");
+      let hero3 = document.getElementById("hero3");
+      let hero4 = document.getElementById("hero4");
+      let statusInfo = document.getElementById("status-info");
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = JSON.parse(localStorage.getItem("token"));
+        if (token) {
+          hero1.classList.add("hidden");
+          hero2.classList.add("hidden");
+          hero3.classList.remove("hidden");
+          hero4.classList.add("hidden");
+          statusInfo.classList.remove("hidden");
+          //doing the following just to check if token is valid or not
+          try {
+            const res = await fetch("http://localhost:2000/me", {
+              headers: {
+                "Content-Type": "application/json",
+                token,
+              },
+            });
+            const data = await res.json();
+            if (data.message) {
+              statusInfo.innerHTML = data.message;
+              throw new Error(data.message);
+            }
+            statusInfo.innerHTML = "Token: " + token;
+          } catch (error) {
+            setTimeout(() => {
+              localStorage.removeItem("token");
+              location.reload(true);
+            }, 2000);
+          }
+
+          return;
+        }
+        hero2.classList.add("hidden");
+        hero3.classList.add("hidden");
+        hero4.classList.add("hidden");
+        statusInfo.classList.add("hidden");
+      });
+
+      document.getElementById("span1").addEventListener("click", () => {
+        hero1.classList.add("hidden");
+        hero2.classList.remove("hidden");
+        statusInfo.classList.add("hidden");
+      });
+
+      document.getElementById("span2").addEventListener("click", () => {
+        hero1.classList.remove("hidden");
+        hero2.classList.add("hidden");
+        statusInfo.classList.add("hidden");
+      });
+
+      document
+        .getElementById("signup")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const username = document
+            .getElementById("signup-username-field")
+            .value.trim();
+          const password = document
+            .getElementById("signup-password-field")
+            .value.trim();
+          const res = await fetch("http://localhost:2000/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              password,
+            }),
+          });
+          const data = await res.json();
+          console.log(data);
+          setTimeout(() => {
+            hero4.classList.add("hidden");
+            hero4.innerHTML = "";
+            hero4.classList.remove("active");
+          }, 3000);
+          hero4.innerHTML = data.message;
+          hero4.classList.remove("hidden");
+          hero4.classList.add("active");
+        });
+
+      document.getElementById("login").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = document
+          .querySelector("#login-username-field")
+          .value.trim();
+        const password = document
+          .querySelector("#login-password-field")
+          .value.trim();
+        const res = await fetch("http://localhost:2000/signin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        });
+        const data = await res.json();
+        if (data.message) {
+          setTimeout(() => {
+            hero4.classList.add("hidden");
+            hero4.innerHTML = "";
+            hero4.classList.remove("active");
+          }, 3000);
+          hero4.innerHTML = data.message;
+          hero4.classList.remove("hidden");
+          hero4.classList.add("active");
+          return;
+        }
+
+        const loginBtn = document.getElementById("login-btn");
+        loginBtn.innerHTML = "Redirecting...";
+        const token = data.token;
+        localStorage.setItem("token", JSON.stringify(token));
+        setTimeout(() => {
+          hero2.classList.add("hidden");
+          hero3.classList.remove("hidden");
+          statusInfo.innerHTML = "Token: " + token;
+          statusInfo.classList.remove("hidden");
+          loginBtn.innerHTML = "Login";
+        }, 1000);
+      });
+
+      document.getElementById("logout").addEventListener("click", () => {
+        let logout = document.getElementById("logout");
+        logout.innerHTML = "Logging Out...";
+        setTimeout(() => {
+          logout.innerHTML = "Logout";
+          localStorage.removeItem("token");
+          hero1.classList.remove("hidden");
+          hero3.classList.add("hidden");
+          statusInfo.classList.add("hidden");
+        }, 1000);
+      });
+
+      document
+        .getElementById("user-information-loader")
+        .addEventListener("click", async () => {
+          const token = JSON.parse(localStorage.getItem("token"));
+          const res = await fetch("http://localhost:2000/me", {
+            headers: {
+              "Content-Type": "application/json",
+              token,
+            },
+          });
+          const data = await res.json();
+          statusInfo.innerHTML = "";
+          const div1 = document.createElement("div");
+          div1.innerHTML = "Username: " + data.username;
+          const div2 = document.createElement("div");
+          div2.innerHTML = "Password: " + data.password;
+          statusInfo.appendChild(div1);
+          statusInfo.appendChild(div2);
+        });
+    </script>
+  </body>
+</html>
