@@ -1,8 +1,9 @@
+require("dotenv").config();
+const JWT_SECRET = process.env.JWT_SECRET;
+
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-
-const JWT_SECRET = "blabla";
 
 const app = express();
 
