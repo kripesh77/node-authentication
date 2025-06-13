@@ -133,6 +133,8 @@
           const password = document
             .getElementById("signup-password-field")
             .value.trim();
+
+          if (!username || !password) return;
           const res = await fetch(
             "https://node-authentication-dhzx.onrender.com/signup",
             {
@@ -166,6 +168,8 @@
         const password = document
           .querySelector("#login-password-field")
           .value.trim();
+
+        if (!username || !password) return;
         const res = await fetch(
           "https://node-authentication-dhzx.onrender.com/signin",
           {
