@@ -92,10 +92,10 @@
             );
             const data = await res.json();
             if (data.message) {
-              statusInfo.innerHTML = data.message;
+              statusInfo.textContent = data.message;
               throw new Error(data.message);
             }
-            statusInfo.innerHTML = "Token: " + token;
+            statusInfo.textContent = "Token: " + token;
           } catch (error) {
             setTimeout(() => {
               localStorage.removeItem("token");
@@ -152,10 +152,10 @@
           console.log(data);
           setTimeout(() => {
             hero4.classList.add("hidden");
-            hero4.innerHTML = "";
+            hero4.textContent = "";
             hero4.classList.remove("active");
           }, 3000);
-          hero4.innerHTML = data.message;
+          hero4.textContent = data.message;
           hero4.classList.remove("hidden");
           hero4.classList.add("active");
         });
@@ -187,33 +187,33 @@
         if (data.message) {
           setTimeout(() => {
             hero4.classList.add("hidden");
-            hero4.innerHTML = "";
+            hero4.textContent = "";
             hero4.classList.remove("active");
           }, 3000);
-          hero4.innerHTML = data.message;
+          hero4.textContent = data.message;
           hero4.classList.remove("hidden");
           hero4.classList.add("active");
           return;
         }
 
         const loginBtn = document.getElementById("login-btn");
-        loginBtn.innerHTML = "Redirecting...";
+        loginBtn.textContent = "Redirecting...";
         const token = data.token;
         localStorage.setItem("token", JSON.stringify(token));
         setTimeout(() => {
           hero2.classList.add("hidden");
           hero3.classList.remove("hidden");
-          statusInfo.innerHTML = "Token: " + token;
+          statusInfo.textContent = "Token: " + token;
           statusInfo.classList.remove("hidden");
-          loginBtn.innerHTML = "Login";
+          loginBtn.textContent = "Login";
         }, 1000);
       });
 
       document.getElementById("logout").addEventListener("click", () => {
         let logout = document.getElementById("logout");
-        logout.innerHTML = "Logging Out...";
+        logout.textContent = "Logging Out...";
         setTimeout(() => {
-          logout.innerHTML = "Logout";
+          logout.textContent = "Logout";
           localStorage.removeItem("token");
           hero1.classList.remove("hidden");
           hero3.classList.add("hidden");
@@ -235,11 +235,11 @@
             }
           );
           const data = await res.json();
-          statusInfo.innerHTML = "";
+          statusInfo.textContent = "";
           const div1 = document.createElement("div");
-          div1.innerHTML = "Username: " + data.username;
+          div1.textContent = "Username: " + data.username;
           const div2 = document.createElement("div");
-          div2.innerHTML = "Password: " + data.password;
+          div2.textContent = "Password: " + data.password;
           statusInfo.appendChild(div1);
           statusInfo.appendChild(div2);
         });
